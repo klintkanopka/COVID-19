@@ -7,3 +7,7 @@ Confirmed case and death data aggregated from county level data available from [
 State level testing rate data pulled from [The COVID Tracking Project](https://covidtracking.com/).
 
 If you know of a reliable county-level report of testing data, please reach out or submit a pull request.
+
+# Plot of cases and deaths
+
+![](cases_deaths.png "COVID Cases")
