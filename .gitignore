@@ -2,6 +2,7 @@
 hook.txt
 archive/
 schedule.sh
+cron.log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
