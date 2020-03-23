@@ -1,6 +1,7 @@
 # Local files
 hook.txt
 archive/
+schedule.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
