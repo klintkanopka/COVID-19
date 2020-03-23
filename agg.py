@@ -6,7 +6,15 @@ from io import StringIO
 from util import fetch_data, notify_slack
 
 
-def cali_agg(c, d, t, out_path):
+def cal_agg(c, d, t, out_path):
+    """
+    Takes as inputs cases, deaths, and testing data and
+    writes a csv of data aggregated for all of California to out_path
+
+    Currently this is the only aggregation script that produces daily
+    testing numbers. This data comes from The Covid Tracking Project
+    and comes with its own caveats.
+    """
     c = c[c['State'] == 'CA']
     c = c.drop(columns = c.columns[0:4])
     c = c.sum(axis = 0)
@@ -119,15 +127,21 @@ def scc_agg(c, d, t, out_path):
     df.to_csv(out_path, index = False)
 
 
-def main(cali_path, bay_path, scc_path, hook_path):
+def main(cal_path, bay_path, scc_path, hook_path = None):
+    """
+    Fetch data and write a cleaned csv for each of California, 
+    the Bay Area, and Santa Clara County. Send a slack notification if
+    hook_path is provided.
+    """
 
     cases, deaths, tests = fetch_data(hook_path)
 
-    cali_agg(cases, deaths, tests, cali_path)
+    cal_agg(cases, deaths, tests, cal_path)
     bay_agg(cases, deaths, tests, bay_path)
     scc_agg(cases, deaths, tests, scc_path)
 
-    notify_slack('updated COVID-19 data', hook_path)
+    if hook_path:
+        notify_slack('updated COVID-19 data', hook_path)
 
 
 if __name__ == '__main__':

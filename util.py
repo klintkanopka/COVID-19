@@ -12,6 +12,12 @@ import time
 
 
 def notify_slack(text, hook_path):
+    """
+    This just sends the contents of text as a message to a slack channel of your choosing.
+    You'll need to use the slack API and get the webhook URL for the destination channel.
+    I just dump that URL into a text file and add the path to my .gitignore
+
+    """
     post = {"text": "{0}".format(text)}
 
     with open(hook_path, 'r') as hook_file:
@@ -28,6 +34,14 @@ def notify_slack(text, hook_path):
 
 
 def fetch_cases():
+    """
+    Fetches county-level data on confirmed cases of COVID-19 from usafacts.org
+
+    Uses requests to forge a header because usafacts.org rejects the 
+    request from pd.read_csv
+
+    Returns a pandas dataframe.
+    """
 
     headers = {'User-agent':'Mozilla/5.0'}
 
@@ -40,6 +54,14 @@ def fetch_cases():
 
 
 def fetch_deaths():
+    """
+    Fetches county-level data on COVID-19 deaths from usafacts.org
+
+    Uses requests to forge a header because usafacts.org rejects the 
+    request from pd.read_csv
+
+    Returns a pandas dataframe.
+    """
 
     headers = {'User-agent':'Mozilla/5.0'}
 
@@ -52,6 +74,15 @@ def fetch_deaths():
 
 
 def fetch_tests():
+    """
+    Fetches California data on COVID-19 testing from covidtracking.com
+
+    The covidtracking.com API is fine with the requests from pd.read_csv,
+    but I formed this request the same as above for consistency. Also this
+    takes advantage of the covidtracking.com API to pre-filter non-CA data
+
+    Returns a pandas dataframe.
+    """
 
     headers = {'User-agent':'Mozilla/5.0'}
 
@@ -64,6 +95,13 @@ def fetch_tests():
 
 
 def fetch_data(hook_path = None):
+    """
+    Calls all of the fetch methods within individual try/except blocks.
+
+    If a hook_path is provided, will also send slack updates on fetch failures.
+
+    Returns one pandas dataframe per fetch (currently three)
+    """
 
     while True:
         try:
