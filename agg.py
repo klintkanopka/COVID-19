@@ -78,14 +78,12 @@ def bay_agg(c, d, t, out_path):
 
 def main(cali_path, bay_path, hook_path):
 
-    base_path = '/home/pi/COVID-19/'
+    cases, deaths, tests = fetch_data(hook_path)
 
-    cases, deaths, tests = fetch_data(base_path + hook_path)
+    cali_agg(cases, deaths, tests, cali_path)
+    bay_agg(cases, deaths, tests, bay_path)
 
-    cali_agg(cases, deaths, tests, base_path + cali_path)
-    bay_agg(cases, deaths, tests, base_path + bay_path)
-
-    notify_slack('updated COVID-19 data', base_path + hook_path)
+    notify_slack('updated COVID-19 data', hook_path)
 
 
 if __name__ == '__main__':
