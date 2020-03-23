@@ -3,7 +3,7 @@ import time
 import requests
 import pandas as pd
 from io import StringIO
-from util import fetch_data
+from util import fetch_data, notify_slack
 
 
 def cali_agg(c, d, t, out_path):
@@ -82,6 +82,8 @@ def main(cali_path, bay_path, hook_path):
 
     cali_agg(cases, deaths, tests, cali_path)
     bay_agg(cases, deaths, tests, bay_path)
+
+    notify_slack('updated COVID-19 data', hook_path)
 
 
 if __name__ == '__main__':
