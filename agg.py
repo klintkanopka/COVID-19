@@ -76,12 +76,56 @@ def bay_agg(c, d, t, out_path):
     df.to_csv(out_path, index = False)
 
 
-def main(cali_path, bay_path, hook_path):
+def scc_agg(c, d, t, out_path):
+    """
+    Takes as inputs cases, deaths, and testing data
+    writes a csv for only santa clara county to out_path
+
+    Note: currently county-level testing data is not available
+    """
+
+    bay_counties = [
+            'Alameda County',
+            'Contra Costa County',
+            'Marin County',
+            'Napa County',
+            'San Mateo County',
+            'Santa Clara County',
+            'Solano County',
+            'Sonoma County',
+            'San Francisco County'
+            ]
+
+    c = c[c['State'] == 'CA']
+    d = d[d['State'] == 'CA']
+
+    c = c[c['County Name'] == 'Santa Clara County']
+    c = c.drop(columns = c.columns[0:4])
+    c = c.sum(axis = 0)
+
+    d = d[d['County Name'] == 'Santa Clara County']
+    d = d.drop(columns = d.columns[0:4])
+    d = d.sum(axis = 0)
+
+    data = {'date': pd.to_datetime(c.index),
+            'cases': c,
+            'deaths': d,
+            'positive': ['' for _ in range(len(c))],
+            'negative': ['' for _ in range(len(c))],
+            'tested': ['' for _ in range(len(c))]}
+
+    df = pd.DataFrame(data)
+
+    df.to_csv(out_path, index = False)
+
+
+def main(cali_path, bay_path, scc_path, hook_path):
 
     cases, deaths, tests = fetch_data(hook_path)
 
     cali_agg(cases, deaths, tests, cali_path)
     bay_agg(cases, deaths, tests, bay_path)
+    scc_agg(cases, deaths, tests, scc_path)
 
     notify_slack('updated COVID-19 data', hook_path)
 
@@ -89,4 +133,5 @@ def main(cali_path, bay_path, hook_path):
 if __name__ == '__main__':
     main('data/california_agg.csv',
             'data/bay_area_agg.csv',
+            'data/santa_clara_agg.csv',
             'hook.txt')
