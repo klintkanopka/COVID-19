@@ -10,4 +10,4 @@ If you know of a reliable county-level report of testing data, please reach out 
 
 # Plot of cases and deaths
 
-![](cases_deaths.png "COVID Cases")
+![](plots/cases_deaths.png "COVID Cases")
