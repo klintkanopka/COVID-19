@@ -1,6 +1,9 @@
 #!/usr/bin/env Rscript
 
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(tidyr)
 
 # Shelter in place order dates
 bay_shelter <- as.Date("2020-03-16")
