@@ -140,3 +140,11 @@ def fetch_data(hook_path = None):
         break
 
     return cases, deaths, tests
+
+def read_local_data():
+    cal = pd.read_csv('data/california_agg.csv')
+    bay = pd.read_csv('data/bay_area_agg.csv')
+    scc = pd.read_csv('data/santa_clara_agg.csv')
+
+    return cal, bay, scc
+
